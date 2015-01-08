@@ -23,33 +23,28 @@ public class BackgroundView extends View{
 
         int x = getWidth();
         int y = getHeight();
-        int radius = 100;
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.RED);
-        canvas.drawCircle(x/2, y/2, radius, paint);
 
-        Bitmap tiles = BitmapFactory.decodeResource(getResources(), R.drawable.tiles);
+        Bitmap tiles = BitmapFactory.decodeResource(getResources(), R.drawable.grasstile);
 
-        for (int r = 4; r < 6; r++) {
-            for (int c = 4; c < 6; c++) {
-                int tempX = r * tiles.getWidth()/4;
-                int tempY = c * tiles.getHeight()/4;
+        for (int r = 0; r < 3; r++) {
+            for (int c = 0; c < 3; c++) {
+                int tempX = r * tiles.getWidth();
+                int tempY = c * tiles.getHeight();
                 placeTile(tiles, twoDimToIso(new Point(tempX, tempY)), canvas);
             }
         }
+    }
+
+    protected void placeTile(Bitmap bitmap, Point p, Canvas canvas) {
+        Rect sourceBounds = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        Rect destinationBounds = new Rect(((int)p.getX()/2 + (getWidth()/2)), (int)p.getY()/2 + getHeight()/2, ((int)p.getX()/2 + (getWidth()/2)) + bitmap.getWidth(), (int)p.getY()/2 + getHeight()/2 + bitmap.getHeight());
+        canvas.drawBitmap(bitmap, sourceBounds, destinationBounds, null);
     }
 
     protected Point twoDimToIso(Point p) {
         double xIso = p.getX() - p.getY();
         double yIso = (p.getX() + p.getY()) / 2.0;
         return new Point(xIso, yIso);
-    }
-
-    protected void placeTile(Bitmap bitmap, Point p, Canvas canvas) {
-        Rect sourceBounds = new Rect(0, bitmap.getHeight()*3/4, bitmap.getWidth()/4, bitmap.getHeight());
-        Rect destinationBounds = new Rect(((int)p.getX() + (bitmap.getWidth()/4 * 2))/2,(int)p.getY()/2, ((int)p.getX() + (bitmap.getWidth()/4 * 2))/2 + bitmap.getWidth()/4, (int)p.getY()/2 + bitmap.getHeight()/4);
-        canvas.drawBitmap(bitmap, sourceBounds, destinationBounds, null);
     }
 }
 
